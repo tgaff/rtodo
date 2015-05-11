@@ -24,11 +24,11 @@ RSpec.describe TodoItemsController, type: :controller do
   # TodoItem. As you add validations to TodoItem, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    { title: 'do this' }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    { title: '' }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -103,15 +103,26 @@ RSpec.describe TodoItemsController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        { title: 'raise elephants', is_complete: true }
       }
 
       it "updates the requested todo_item" do
         todo_item = TodoItem.create! valid_attributes
         put :update, {:id => todo_item.to_param, :todo_item => new_attributes}, valid_session
         todo_item.reload
-        skip("Add assertions for updated state")
+        expect(todo_item.title).to eq new_attributes[:title]
+        expect(todo_item.is_complete).to be_truthy
       end
+
+      it "doesn't change the title if unspecified" do
+        todo_item = TodoItem.create! valid_attributes
+        todo_item_original_title = todo_item.title
+        put :update, {:id => todo_item.to_param, :todo_item => {is_complete: true}}, valid_session
+        todo_item.reload
+        expect(todo_item.is_complete).to be_truthy
+        expect(todo_item.title).to eq todo_item_original_title
+      end
+
 
       it "assigns the requested todo_item as @todo_item" do
         todo_item = TodoItem.create! valid_attributes
