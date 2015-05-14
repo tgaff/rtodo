@@ -2,11 +2,12 @@ require 'rails_helper'
 
 RSpec.feature "Toggling a todo item" do
   background do
+    puts 'executed background'
+
     TodoItem.create(:title => 'blah blah').save!
   end
 
   scenario "toggling it to true", js: true do
-    pending("not working until we have database cleaner and can stop using transactions")
     visit '/'
     within(".todo-item") do
       click_button 'false'
