@@ -6,6 +6,7 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'shoulda/matchers'
 require 'capybara/rails'
+require 'capybara/rspec'
 
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

@@ -13,9 +13,9 @@
 
   <tbody>
     <% @todo_items.each do |todo_item| %>
-      <tr>
+      <tr class="todo-item">
         <td><%= todo_item.title %></td>
-        <td><%= todo_item.is_complete %></td>
+        <td><%= button_to [:toggle_complete, todo_item], class: 'complete-toggle' do %><%= todo_item.is_complete %><% end %></td>
         <td><%= link_to 'Show', todo_item %></td>
         <td><%= link_to 'Edit', edit_todo_item_path(todo_item) %></td>
         <td><%= link_to 'Destroy', todo_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -24,6 +24,5 @@
   </tbody>
 </table>
 
-<br>
 
 <%= link_to 'New Todo item', new_todo_item_path %>

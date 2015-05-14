@@ -1,5 +1,5 @@
 class TodoItemsController < ApplicationController
-  before_action :set_todo_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_todo_item, only: [:show, :edit, :update, :destroy, :toggle_complete]
 
   # GET /todo_items
   # GET /todo_items.json
@@ -59,6 +59,12 @@ class TodoItemsController < ApplicationController
       format.html { redirect_to todo_items_url, notice: 'Todo item was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def toggle_complete
+    @todo_item.is_complete = !@todo_item.is_complete
+    @todo_item.save
+    redirect_to todo_items_url
   end
 
   private
