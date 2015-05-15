@@ -42,31 +42,21 @@ RSpec.configure do |config|
 
 
   config.before(:suite) do
-    puts TodoItem.all
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  config.before(:each) do
-    puts 'use transaction'
-    DatabaseCleaner.strategy = :transaction
-  end
-
-  config.before(:each, :js => true) do
-    puts 'use truncation'
-    DatabaseCleaner.strategy = :truncation
-  end
-
-
-  config.before(:each) do
+  config.before(:each) do |example|
+    DatabaseCleaner.strategy= example.metadata[:js] ? :truncation : :transaction
     DatabaseCleaner.start
   end
 
   config.after(:each) do
+    #puts " use #{DatabaseCleaner.connections.last.strategy.to_s.match(/T.*:/)[0]}"
     DatabaseCleaner.clean
   end
 
 # the below would be neater, but there's currently a bug:
-# https://github.com/DatabaseCleaner/database_cleaner/issues/273#issuecomment-102199747
+# https://github.com/DatabaseCleaner/database_cleaner/issues/273
 =begin
   config.around(:each) do |example|
     DatabaseCleaner.strategy= example.metadata[:js] ? :truncation : :transaction
