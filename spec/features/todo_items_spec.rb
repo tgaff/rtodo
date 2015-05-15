@@ -27,7 +27,7 @@ RSpec.feature "Toggling a todo item" do
     expect(page.find('.todo-item', text: 'im done')).to have_button 'true'
   end
 
-  scenario "deleting an item", js: true, focus: true do
+  scenario "deleting an item", js: true do
     visit '/'
     expect(page.find('.todo-item')).to have_content 'blah blah'
     page.accept_alert 'Are you sure?' do
