@@ -1,0 +1,9 @@
+$('#todo_<%= @todo_item.id %>').css("text-decoration", "line-through");
+$('#todo_<%= @todo_item.id %>').fadeOut(1000, function() {
+  $('#todo_<%= @todo_item.id %>').remove();
+});
+//$('#notice').html('<%= flash[:notice] %>');
+$('#notice').html('the todo was successfully deleted');
+$('#notice').fadeOut(4000);
+
+

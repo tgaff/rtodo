@@ -58,9 +58,14 @@ class TodoItemsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to todo_items_url, notice: 'Todo item was successfully destroyed.' }
       format.json { head :no_content }
+      format.js  do
+        #flash.notice = "todo item destroyed"  # handling this string in JS instead
+        render :destroy
+      end
     end
   end
 
+  # POST /todo_items/:id/toggle_complete(.:format)
   def toggle_complete
     @todo_item.is_complete = !@todo_item.is_complete
     @todo_item.save
