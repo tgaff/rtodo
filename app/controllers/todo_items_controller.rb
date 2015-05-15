@@ -64,7 +64,7 @@ class TodoItemsController < ApplicationController
   def toggle_complete
     @todo_item.is_complete = !@todo_item.is_complete
     @todo_item.save
-    redirect_to todo_items_url
+ #   redirect_to todo_items_url
   end
 
   private

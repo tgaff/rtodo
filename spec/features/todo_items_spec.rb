@@ -2,8 +2,6 @@ require 'rails_helper'
 
 RSpec.feature "Toggling a todo item" do
   background do
-    puts 'executed background'
-
     TodoItem.create(:title => 'blah blah').save!
   end
 
@@ -12,7 +10,13 @@ RSpec.feature "Toggling a todo item" do
     within(".todo-item") do
       click_button 'false'
       expect(page.find('button')).to have_content 'true'
+
+      # also verify it's true on view page
+      click_link('Show')
     end
+    expect(page).to have_content 'blah blah'
+    expect(page).to have_content "Iscomplete: true"
+
   end
 
   given(:true_todo) { TodoItem.create(title: 'im done', is_complete: true) }
