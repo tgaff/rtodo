@@ -27,14 +27,34 @@ RSpec.feature "Toggling a todo item" do
     expect(page.find('.todo-item', text: 'im done')).to have_button 'true'
   end
 
-  scenario "deleting an item", js: true do
-    visit '/'
-    expect(page.find('.todo-item')).to have_content 'blah blah'
-    page.accept_alert 'Are you sure?' do
-      click_link 'Delete'
+  context "deleting a todo:", js: true do
+
+
+    scenario "it is removed from the page and a message displayed", js: true do
+      visit '/'
+      expect(page.first('.todo-item')).to have_content 'blah blah'
+      page.accept_alert 'Are you sure?' do
+        click_link 'Delete'
+      end
+      expect(page.find('#notice')).to have_content('The todo was successfully deleted')
+      expect(page).to have_no_css('.todo-item')
+      expect(page).to have_no_content 'blah blah'
     end
-    expect(page.find('#notice')).to have_content('the todo was successfully deleted')
-    expect(page).to have_no_css('.todo-item')
-    expect(page).to have_no_content 'blah blah'
+
+    context "when the todo doesn't actually exist:" do
+
+      scenario "the page is reloaded showing only existing items" do
+        visit '/'
+        expect(page.first('.todo-item')).to have_content 'blah blah'
+
+        TodoItem.create(title: 'blah2')
+        TodoItem.find_by_title('blah blah').destroy
+        page.accept_alert do
+          click_link 'Delete'
+        end
+        page.has_no_content? 'blah blah' # wait for transition
+        expect(page.first('.todo-item')).to have_content 'blah2'
+      end
+    end
   end
 end

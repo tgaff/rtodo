@@ -1,5 +1,5 @@
 class TodoItemsController < ApplicationController
-  before_action :set_todo_item, only: [:show, :edit, :update, :destroy, :toggle_complete]
+  before_action :set_todo_item, only: [:show, :edit, :update, :toggle_complete]
 
   # GET /todo_items
   # GET /todo_items.json
@@ -54,13 +54,23 @@ class TodoItemsController < ApplicationController
   # DELETE /todo_items/1
   # DELETE /todo_items/1.json
   def destroy
-    @todo_item.destroy
-    respond_to do |format|
-      format.html { redirect_to todo_items_url, notice: 'Todo item was successfully destroyed.' }
-      format.json { head :no_content }
-      format.js  do
-        #flash.notice = "todo item destroyed"  # handling this string in JS instead
-        render :destroy
+    # find_by_id does not raise exception like .find
+    @todo_item = TodoItem.find_by_id(params[:id])
+    if @todo_item
+      @todo_item.destroy
+      respond_to do |format|
+        format.html { redirect_to todo_items_url, notice: 'Todo item was successfully destroyed.' }
+        format.json { head :no_content }
+        format.js  do
+          flash.notice = "The todo was successfully deleted"
+          render :destroy
+        end
+      end
+    else
+      respond_to do |format|
+        format.js do
+          flash.notice = "The selected todo did not exist"
+        end
       end
     end
   end
