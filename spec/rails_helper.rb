@@ -8,6 +8,7 @@ require 'shoulda/matchers'
 require 'database_cleaner'
 require 'capybara/rails'
 #require 'capybara/rspec'
+require 'capybara-screenshot/rspec'
 
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

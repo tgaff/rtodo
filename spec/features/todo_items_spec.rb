@@ -10,12 +10,10 @@ RSpec.feature "Toggling a todo item" do
     within(".todo-item") do
       click_button 'false'
       expect(page.find('button')).to have_content 'true'
-
-      # also verify it's true on view page
-      click_link('Show')
+      click_link('Edit')
     end
-    expect(page).to have_content 'blah blah'
-    expect(page).to have_content "Iscomplete: true"
+    expect(page).to have_field 'Title', with: 'blah blah'
+    expect(page).to have_checked_field('Is complete')
 
   end
 

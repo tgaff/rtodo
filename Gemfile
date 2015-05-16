@@ -52,4 +52,5 @@ group :test do
   gem 'selenium-webdriver'
   gem "factory_girl_rails", "~> 4.0"
   gem "database_cleaner"
+  gem 'capybara-screenshot'
 end
