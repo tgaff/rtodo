@@ -159,12 +159,23 @@ RSpec.describe TodoItemsController, type: :controller do
         delete :destroy, {:id => todo_item.to_param}, valid_session
       }.to change(TodoItem, :count).by(-1)
     end
-
-    it "redirects to the todo_items list" do
-      todo_item = TodoItem.create! valid_attributes
-      delete :destroy, {:id => todo_item.to_param}, valid_session
-      expect(response).to redirect_to(todo_items_url)
+    context 'using format: html' do
+      it "redirects to the todo_items list" do
+        todo_item = TodoItem.create! valid_attributes
+        delete :destroy, {:id => todo_item.to_param}, valid_session
+        expect(response).to redirect_to(todo_items_url)
+      end
+    end
+    context 'using format: js' do
+      let(:todo_item) { TodoItem.create! valid_attributes }
+      it "renders destroy" do
+        delete :destroy, format: :js, id: todo_item.to_param
+        expect(response).to render_template("destroy")
+      end
+      it "displays a flash notice" do
+        delete :destroy, format: :js, id: todo_item.to_param
+        expect(flash[:notice]).to be_present
+      end
     end
   end
-
 end
