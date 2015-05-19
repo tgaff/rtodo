@@ -30,9 +30,14 @@ class TodoItemsController < ApplicationController
       if @todo_item.save
         format.html { redirect_to @todo_item, notice: 'Todo item was successfully created.' }
         format.json { render :show, status: :created, location: @todo_item }
+        format.js do
+          flash.notice = 'Todo item was successfully created.'
+          render :insert
+        end
       else
         format.html { render :new }
         format.json { render json: @todo_item.errors, status: :unprocessable_entity }
+        format.js { render :new } # shows the error messages
       end
     end
   end

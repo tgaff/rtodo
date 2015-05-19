@@ -68,34 +68,74 @@ RSpec.describe TodoItemsController, type: :controller do
   end
 
   describe "POST #create" do
-    context "with valid params" do
-      it "creates a new TodoItem" do
-        expect {
+    context "using format HTML" do
+      context "with valid params" do
+        it "creates a new TodoItem" do
+          expect {
+            post :create, {:todo_item => valid_attributes}, valid_session
+          }.to change(TodoItem, :count).by(1)
+        end
+
+        it "assigns a newly created todo_item as @todo_item" do
           post :create, {:todo_item => valid_attributes}, valid_session
-        }.to change(TodoItem, :count).by(1)
+          expect(assigns(:todo_item)).to be_a(TodoItem)
+          expect(assigns(:todo_item)).to be_persisted
+        end
+
+        it "redirects to the created todo_item" do
+          post :create, {:todo_item => valid_attributes}, valid_session
+          expect(response).to redirect_to(TodoItem.last)
+        end
       end
 
-      it "assigns a newly created todo_item as @todo_item" do
-        post :create, {:todo_item => valid_attributes}, valid_session
-        expect(assigns(:todo_item)).to be_a(TodoItem)
-        expect(assigns(:todo_item)).to be_persisted
-      end
+      context "with invalid params" do
+        it "assigns a newly created but unsaved todo_item as @todo_item" do
+          post :create, {:todo_item => invalid_attributes}, valid_session
+          expect(assigns(:todo_item)).to be_a_new(TodoItem)
+        end
 
-      it "redirects to the created todo_item" do
-        post :create, {:todo_item => valid_attributes}, valid_session
-        expect(response).to redirect_to(TodoItem.last)
+        it "re-renders the 'new' template" do
+          post :create, {:todo_item => invalid_attributes}, valid_session
+          expect(response).to render_template("new")
+        end
       end
     end
+    context "using format JS" do
+      context "with valid params" do
+        it "creates a new TodoItem" do
+          expect {
+            post :create, {:todo_item => valid_attributes, format: 'js'}, valid_session
+          }.to change(TodoItem, :count).by(1)
+        end
 
-    context "with invalid params" do
-      it "assigns a newly created but unsaved todo_item as @todo_item" do
-        post :create, {:todo_item => invalid_attributes}, valid_session
-        expect(assigns(:todo_item)).to be_a_new(TodoItem)
+        it "assigns a newly created todo_item as @todo_item" do
+          post :create, {:todo_item => valid_attributes, format: 'js'}, valid_session
+          expect(assigns(:todo_item)).to be_a(TodoItem)
+          expect(assigns(:todo_item)).to be_persisted
+        end
+
+        it "renders the insert template with the created todo_item" do
+          post :create, {:todo_item => valid_attributes, format: :js}, valid_session
+          expect(response).to render_template('insert')
+        end
+
+        it "includes a notice" do
+          post :create, { todo_item: valid_attributes, format: :js }, valid_session
+          expect(flash[:notice]).to be_present
+        end
       end
 
-      it "re-renders the 'new' template" do
-        post :create, {:todo_item => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
+      context "with invalid params" do
+        it "assigns a newly created but unsaved todo_item as @todo_item" do
+          post :create, {:todo_item => invalid_attributes, format: :js}, valid_session
+          expect(assigns(:todo_item)).to be_a_new(TodoItem)
+        end
+
+        it "renders the new template with the error messages" do
+          post :create, {:todo_item => invalid_attributes, format: :js}, valid_session
+          expect(response).to render_template("new")
+          expect(assigns(:todo_item).errors).to be_present
+        end
       end
     end
   end

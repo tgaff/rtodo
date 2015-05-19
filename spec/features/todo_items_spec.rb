@@ -27,7 +27,6 @@ RSpec.feature "todo item" do
 
   context "deleting a todo:", js: true do
 
-
     scenario "it is removed from the page and a message displayed", js: true do
       visit '/'
       expect(page.first('.todo-item')).to have_content 'blah blah'
@@ -62,13 +61,14 @@ RSpec.feature "todo item" do
     end
 
     scenario "clicking 'new Todo item'  displays a new form" do
+      expect(page).to have_no_field 'Title'
+      expect(page).to have_no_field 'Save'
       click_link 'New Todo item'
       expect(page).to have_field 'Title'
       expect(page).to have_button 'Save'
     end
 
     scenario "clicking 'Save' saves the todo" do
-
       click_link 'New Todo item'
       fill_in('Title', with: 'dishes')
       click_button 'Save'

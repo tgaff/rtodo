@@ -1,0 +1,7 @@
+$('#new-item').html("");
+$('tbody').append("<%=j render "row", todo_item: @todo_item %>");
+$('#notice').html('<%= flash[:notice] %>');
+$('#notice').fadeOut(4000, function() {
+  $('#notice').html('');
+  $('#notice').show();
+});
