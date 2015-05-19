@@ -25,5 +25,6 @@
   </tbody>
 </table>
 
-<%= link_to 'New Todo item', new_todo_item_path %>
+      <div class="new-item" id="new-item"></div>
+<%= link_to 'New Todo item', new_todo_item_path, remote: true %>
 <p id="notice"><%= notice %></p>

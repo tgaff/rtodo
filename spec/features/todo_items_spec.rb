@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec.feature "Toggling a todo item" do
+RSpec.feature "todo item" do
   background do
     TodoItem.create(:title => 'blah blah').save!
   end
 
-  scenario "toggling it to true", js: true do
+  scenario "toggling the item to true", js: true do
     visit '/'
     within(".todo-item") do
       click_button 'false'
@@ -53,6 +53,26 @@ RSpec.feature "Toggling a todo item" do
         page.has_no_content? 'blah blah' # wait for transition
         expect(page.first('.todo-item')).to have_content 'blah2'
       end
+    end
+  end
+
+  context 'creating a new todo', js: true do
+    background do
+      visit '/'
+    end
+
+    scenario "clicking 'new Todo item'  displays a new form" do
+      click_link 'New Todo item'
+      expect(page).to have_field 'Title'
+      expect(page).to have_button 'Save'
+    end
+
+    scenario "clicking 'Save' saves the todo" do
+
+      click_link 'New Todo item'
+      fill_in('Title', with: 'dishes')
+      click_button 'Save'
+      expect(page).to have_content 'dishes'
     end
   end
 end
