@@ -175,6 +175,13 @@ RSpec.describe TodoItemsController, type: :controller do
         put :update, {:id => todo_item.to_param, :todo_item => valid_attributes}, valid_session
         expect(response).to redirect_to(todo_item)
       end
+      context "with format js" do
+        it "renders update_row" do
+          todo_item = TodoItem.create! valid_attributes
+          put :update, { format: :js, id: todo_item.to_param, todo_item: new_attributes }, valid_session
+          expect(response).to render_template("update_row")
+        end
+      end
     end
 
     context "with invalid params" do
@@ -188,6 +195,13 @@ RSpec.describe TodoItemsController, type: :controller do
         todo_item = TodoItem.create! valid_attributes
         put :update, {:id => todo_item.to_param, :todo_item => invalid_attributes}, valid_session
         expect(response).to render_template("edit")
+      end
+      context "with format js" do
+        it "re-renders the 'edit' template" do
+          todo_item = TodoItem.create! valid_attributes
+          put :update, {format: :js, id: todo_item.to_param, todo_item: invalid_attributes }, valid_session
+          expect(response).to render_template("edit")
+        end
       end
     end
   end

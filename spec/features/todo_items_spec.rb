@@ -10,11 +10,12 @@ RSpec.feature "todo item" do
     within(".todo-item") do
       click_button 'false'
       expect(page.find('button')).to have_content 'true'
-      click_link('Edit')
     end
+    # access the 'secret' edit page (the original rails default page :-/)))
+    model_id = find(".todo-item")['id'].match(/\d+/)[0]
+    visit "/todo_items/#{model_id}/edit"
     expect(page).to have_field 'Title', with: 'blah blah'
     expect(page).to have_checked_field('Is complete')
-
   end
 
   given(:true_todo) { TodoItem.create(title: 'im done', is_complete: true) }
@@ -73,6 +74,46 @@ RSpec.feature "todo item" do
       fill_in('Title', with: 'dishes')
       click_button 'Save'
       expect(page).to have_content 'dishes'
+    end
+  end
+
+  context 'when editing an existing todo', js: true do
+    background do
+      TodoItem.create(title: 'do dishes').save!
+      TodoItem.create(title: 'stretch giraffes').save!
+      visit '/'
+    end
+
+    let(:editing_row) { find('tr', text: 'do dishes') }
+
+    scenario 'an inline form is shown on the same row' do
+      within(editing_row) do
+        click_link('Edit')
+        expect(current_scope).to have_field('Title', with: 'do dishes')
+      end
+    end
+
+    scenario 'saving the form displays an error if it is empty' do
+      within(editing_row) do
+        click_link('Edit')
+        fill_in 'Title', with: ''
+        click_button 'Save'
+        expect(current_scope).to have_css("div#error_explanation")
+      end
+    end
+
+    scenario 'saving the form updates the edit value' do
+      within(editing_row) do
+        click_link('Edit')
+        fill_in 'Title', with: 'mold small lumps of clay'
+        click_button 'Save'
+        # we lose current_scope/editing_row here as it's a textual match
+      end
+      expect(page).to have_content 'mold small lumps of clay'
+    end
+
+    scenario 'editing a line disables edit for all other lines' do
+      skip 'not implemented'
     end
   end
 end
