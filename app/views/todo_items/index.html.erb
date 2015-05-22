@@ -1,22 +1,25 @@
+<section id="todoapp">
+  <header id="header">
+    <h1>todos</h1>
+    <div class="new-item" id="new-item"></div>
+    <%= link_to 'New Todo item', new_todo_item_path, remote: true %>
+  </header>
+  <section id="main">
+  <table>
+    <thead>
+      <tr>
+        <th>Done?</th>
+        <th>Title</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
 
-<h1>Listing Todo Items</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Iscomplete</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @todo_items.each do |todo_item| %>
-      <%= render "row", todo_item: todo_item %>
-    <% end %>
-  </tbody>
-</table>
-
-<div class="new-item" id="new-item"></div>
-<%= link_to 'New Todo item', new_todo_item_path, remote: true %>
-<p id="notice"><%= notice %></p>
+    <tbody id='todo-list'>
+      <% @todo_items.each do |todo_item| %>
+        <%= render "row", todo_item: todo_item %>
+      <% end %>
+    </tbody>
+  </table>
+</section>
+ <p id="notice"><%= notice %></p>
+</section>
