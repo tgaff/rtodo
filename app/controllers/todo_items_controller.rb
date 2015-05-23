@@ -1,5 +1,6 @@
 class TodoItemsController < ApplicationController
   before_action :set_todo_item, only: [:show, :edit, :update, :toggle_complete]
+  before_filter :authenticate_user!
 
   # GET /todo_items
   # GET /todo_items.json
