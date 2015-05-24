@@ -22,4 +22,6 @@ RSpec.describe TodoItem, type: :model do
     t.save
     expect(t.is_complete).to eq false
   end
+
+  it { should belong_to :user }
 end
